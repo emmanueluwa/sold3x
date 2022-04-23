@@ -59,6 +59,43 @@ def get_sold_items(driver):
         
     return found_items
 
+
+def parse_sold_item(product):
+    title_tag = product.find_element(By.CLASS_NAME, 'vip')
+    title = title_tag.text
+    url = title_tag.get_attribute('href')
+
+    thumbnail_tag = product.find_element(By.TAG_NAME, 'img')
+    thumbnail_url = thumbnail_tag.get_attribute('src')
+
+    condition_tag = product.find_element(By.CLASS_NAME, 'lvsubtitle')
+    condition = condition_tag.text
+
+    price_tag = product.find_element(By.CLASS_NAME, 'bidsold')
+    price = price_tag.text
+
+    sold_time_tag = product.find_element(By.CLASS_NAME, 'tme')
+    sold_time = sold_time_tag.text
+
+    #if not, then type is buy now?
+    try:
+        listing_type_tag = product.find_element(By.CLASS_NAME, "lvformat")
+        listing_type = listing_type_tag.text
+    except:
+        driver.quit()
+
+    #return dictionary
+    return {
+        'title': title,
+        'url': url,
+        'thumbnail_url': thumbnail_url,
+        'condition': condition,
+        'price': price,
+        'sold_time': sold_time,
+        'listing_type': listing_type
+    }
+
+
 #to run for this script only
 if __name__ == "__main__":
     print('Creatiing driver')
@@ -69,6 +106,11 @@ if __name__ == "__main__":
     products = get_sold_items(driver)
     print(f'Fetching sold items')
     print(f'This is the number of items = {len(products)}')
+
+    print('Parsing first page items')
+    sold_items_data = [parse_sold_item(product) for product in products[0:10]]
+
+    print(sold_items_data)
 
     driver.quit()
 
