@@ -42,18 +42,24 @@ if __name__ == "__main__":
         driver.quit()
     
     print('searching for item')
-    # search_bar = driver.find_element_by_id("gh-ac")
-    # # make sure search bar is empty
-    # search_bar.clear()
-    # search_bar.send_keys("ps5")
-    # #press enter
-    # search_bar.send_keys(Keys.RETURN)
-
     
     #click sold items filter
     time.sleep(5)
-    sold_link = driver.find_element(By.NAME, "Sold listings")
+    sold_link = driver.find_element(By.ID, "LH_Sold")
     sold_link.click()
+
+    searh_bar_id = '_nkw'
+    search_bar = driver.find_element(By.ID, searh_bar_id)
+    # make sure search bar is empty
+    search_bar.clear()
+    search_bar.send_keys("ps5")
+    #press enter
+    search_bar.send_keys(Keys.RETURN)
+
+    #get the listed items
+    listed_items_class = 'sresult lvresult clearfix li' 
+    listed_items  = driver.find_element(By.CLASS_NAME, listed_items_class)
+    print(f'Found {len(listed_items)} items.')
     # driver.quit()
 
 
